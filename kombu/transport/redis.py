@@ -1014,10 +1014,8 @@ class SentinelChannel(Channel):
         'min_other_sentinels',
         'sentinel_timeout')
 
-    @cached_property
-    def _sentinel_managed_pool(self):
-
-        connparams = self._connparams()
+    def _make_sentinel_connection_pool(self, async):
+        connparams = self._connparams(async=async)
 
         sentinel = redis.sentinel.Sentinel(
             [(connparams['host'], connparams['port'])],
@@ -1031,8 +1029,19 @@ class SentinelChannel(Channel):
             self.Client,
             socket_timeout=self.socket_timeout).connection_pool
 
-    def _get_pool(self):
-        return self._sentinel_managed_pool
+    @cached_property
+    def _sentinel_managed_pool(self):
+        return self._make_sentinel_connection_pool(False)
+
+    @cached_property
+    def _sentinel_async_managed_pool(self):
+        return self._make_sentinel_connection_pool(False)
+
+    def _get_pool(self, async=False):
+        if async:
+            return self._sentinel_async_managed_pool
+        else:
+            return self._sentinel_managed_pool
 
 
 class SentinelTransport(Transport):
