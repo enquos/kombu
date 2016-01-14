@@ -148,7 +148,7 @@ extras_require[':python_version=="2.6"'] = reqs('py26.txt')
 
 setup(
     name='kombu',
-    version=meta['VERSION'],
+    version=meta['VERSION'] + '.post1+e359955728cafb6cfa4d364b46c729914b922d73',
     description=meta['doc'],
     author=meta['author'],
     author_email=meta['contact'],
