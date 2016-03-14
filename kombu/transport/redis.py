@@ -38,7 +38,7 @@ except ImportError:  # pragma: no cover
             pass
 
 try:
-    import redis
+    import redis.sentinel
 except ImportError:  # pragma: no cover
     redis = None     # noqa
 
